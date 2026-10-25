@@ -1,0 +1,49 @@
+# ytbulk rules: what to change, and nothing else.
+# Every rule is applied by the engine, previewed in a dry run, and logged.
+# This file is also what `python -m ytbulk --demo` uses against the synthetic Demo Channel.
+
+quota:
+  daily_limit: 10000     # YouTube Data API v3 default project quota
+  update_cost: 50        # videos.update
+  list_cost: 1           # channels.list / playlistItems.list / videos.list
+  reserve: 0             # units to leave for other tools sharing the project
+
+titles:
+  max_length: 100        # YouTube's limit; longer results are skipped, not truncated
+  # Exact one-off renames win over the regex rules below.
+  exact:
+    "Everything You NEED To Know About Accruals": "Accruals Explained: The Month-End Entry Everyone Gets Wrong"
+  # First matching rule wins. Python regex syntax; use \g<name> for groups.
+  # A rule whose output it would rewrite again is refused (must be idempotent).
+  rules:
+    - name: full-review
+      find: '^We Rated Every (?P<topic>.+?) \(Full Review\)$'
+      replace: '\g<topic>: Which Ones Are Actually Worth It?'
+      ignore_case: true
+    - name: rated
+      find: '^We Rated Every (?P<topic>.+)$'
+      replace: 'The Best \g<topic>, Compared Honestly'
+      ignore_case: true
+    - name: here-are
+      find: '^Here Are The (?P<n>\d+) BEST (?P<topic>.+?)\.*$'
+      replace: '\g<n> \g<topic> Worth Using (And What to Skip)'
+      ignore_case: true
+
+descriptions:
+  max_bytes: 5000
+  # Boilerplate first-line openers. The phrase is removed from the start of the
+  # first line (or replaced with `replace_with`); the rest of the text is untouched.
+  openers:
+    - name: boilerplate-opener
+      starts_with: "It's time for another video!"
+      replace_with: ""
+
+sponsor:
+  # Re-runs skip any description that already contains the marker.
+  marker: "example.com/?ref=DEMO"
+  max_description_bytes: 5000
+  block: |
+    -----------------------
+    Sponsor: Globex Cloud
+    Try it free: https://example.com/?ref=DEMO
+    Discount code: DEMO10

@@ -1,0 +1,32 @@
+# secrets and credentials
+.env
+.env.*
+!.env.example
+.dev.vars
+.secrets/
+client_secret*.json
+*token*.json
+
+# run artifacts: change logs contain real video data
+data/
+output/
+logs/
+yt_changes_*.csv
+yt_plan_*.csv
+*.db
+*.log
+
+# local config (copy of config/rules.example.yaml with your real rules)
+config/rules.yaml
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# js (not used, kept for consistency)
+node_modules/

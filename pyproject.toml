@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "youtube-metadata-bulk"
+version = "0.1.0"
+description = "Bulk YouTube title/description changes with dry run, quota budget, change log and undo."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Mark Valderrama" }]
+requires-python = ">=3.10"
+dependencies = [
+  "pyyaml>=6",
+  "google-api-python-client>=2.100",
+  "google-auth>=2.20",
+  "google-auth-oauthlib>=1.0",
+]
+
+[project.urls]
+Repository = "https://github.com/markvalderrama001-svg/youtube-metadata-bulk"
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+ytbulk = "ytbulk.__main__:main"
+
+[tool.setuptools]
+packages = ["ytbulk"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
